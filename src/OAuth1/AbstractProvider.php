@@ -8,6 +8,7 @@ use League\OAuth1\Client\Credentials\TokenCredentials;
 use SocialiteProviders\Manager\ConfigTrait;
 use SocialiteProviders\Manager\Contracts\ConfigInterface as Config;
 use SocialiteProviders\Manager\Contracts\OAuth1\ProviderInterface;
+use SocialiteProviders\Manager\Exception\InvalidArgumentException;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 
 abstract class AbstractProvider extends BaseProvider implements ProviderInterface
@@ -42,7 +43,7 @@ abstract class AbstractProvider extends BaseProvider implements ProviderInterfac
     public function user()
     {
         if (!$this->hasNecessaryVerifier()) {
-            throw new \InvalidArgumentException('Invalid request. Missing OAuth verifier.');
+            throw new InvalidArgumentException('Invalid request. Missing OAuth verifier.');
         }
 
         $token = $this->getToken();
