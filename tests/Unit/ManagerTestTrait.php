@@ -2,7 +2,7 @@
 
 namespace SocialiteProviders\Manager\Test\Unit;
 
-use Illuminate\Contracts\Container\Container as ContainerContract;
+use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Http\Request as HttpRequest;
 use Laravel\Socialite\SocialiteManager;
 use Mockery as m;
@@ -32,11 +32,11 @@ trait ManagerTestTrait
     }
 
     /**
-     * @return \Mockery\MockInterface|\Illuminate\Contracts\Container\Container
+     * @return \Mockery\MockInterface|\Illuminate\Contracts\Foundation\Application
      */
     protected function appMock()
     {
-        return m::mock(ContainerContract::class);
+        return m::mock(ApplicationContract::class);
     }
 
     /**

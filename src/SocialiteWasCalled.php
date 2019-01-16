@@ -2,7 +2,7 @@
 
 namespace SocialiteProviders\Manager;
 
-use Illuminate\Contracts\Container\Container as Application;
+use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Laravel\Socialite\Contracts\Factory as SocialiteFactory;
 use Laravel\Socialite\One\AbstractProvider as SocialiteOAuth1AbstractProvider;
 use Laravel\Socialite\SocialiteManager;
@@ -16,7 +16,7 @@ class SocialiteWasCalled
     const SERVICE_CONTAINER_PREFIX = 'SocialiteProviders.config.';
 
     /**
-     * @var \Illuminate\Contracts\Container\Container
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     protected $app;
 
@@ -26,10 +26,10 @@ class SocialiteWasCalled
     private $configRetriever;
 
     /**
-     * @param \Illuminate\Contracts\Container\Container $app
+     * @param \Illuminate\Contracts\Foundation\Application $app
      * @param \SocialiteProviders\Manager\Contracts\Helpers\ConfigRetrieverInterface $configRetriever
      */
-    public function __construct(Application $app, ConfigRetrieverInterface $configRetriever)
+    public function __construct(ApplicationContract $app, ConfigRetrieverInterface $configRetriever)
     {
         $this->app = $app;
         $this->configRetriever = $configRetriever;
