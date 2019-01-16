@@ -2,9 +2,10 @@
 
 namespace SocialiteProviders\Manager\Test\Unit;
 
+use PHPUnit_Framework_TestCase as TestCase;
 use SocialiteProviders\Manager\OAuth2\User;
 
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends TestCase
 {
     use ManagerTestTrait;
 

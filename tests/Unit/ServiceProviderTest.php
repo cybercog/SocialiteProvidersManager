@@ -3,17 +3,18 @@
 namespace SocialiteProviders\Manager\Test\Unit;
 
 use Mockery as m;
+use PHPUnit_Framework_TestCase as TestCase;
 use SocialiteProviders\Manager\ServiceProvider;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 
-class ServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ServiceProviderTest extends TestCase
 {
     use ManagerTestTrait;
 
     /**
      * @test
      */
-    public function it_fires_an_event()
+    public function it_fires_socialite_was_called_event_on_boot()
     {
         $socialiteWasCalledMock = m::mock(SocialiteWasCalled::class);
         self::$functions

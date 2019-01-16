@@ -2,9 +2,9 @@
 
 namespace SocialiteProviders\Manager\Test\Unit\Stubs;
 
-use SocialiteProviders\Manager\OAuth1\AbstractProvider;
+use SocialiteProviders\Manager\OAuth1\AbstractProvider as OAuth1AbstractProvider;
 
-class OAuth1ProviderStub extends AbstractProvider
+class OAuth1ProviderStub extends OAuth1AbstractProvider
 {
     const IDENTIFIER = 'TEST';
 

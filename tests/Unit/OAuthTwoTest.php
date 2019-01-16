@@ -6,13 +6,13 @@ use Illuminate\Contracts\Session\Session as SessionContract;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Two\User as SocialiteOAuth2User;
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 use SocialiteProviders\Manager\OAuth2\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class OAuthTwoTest extends PHPUnit_Framework_TestCase
+class OAuthTwoTest extends TestCase
 {
     /**
      * @test

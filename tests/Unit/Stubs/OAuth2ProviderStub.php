@@ -2,9 +2,9 @@
 
 namespace SocialiteProviders\Manager\Test\Unit\Stubs;
 
-use SocialiteProviders\Manager\OAuth2\AbstractProvider;
+use SocialiteProviders\Manager\OAuth2\AbstractProvider as OAuth2AbstractProvider;
 
-class OAuth2ProviderStub extends AbstractProvider
+class OAuth2ProviderStub extends OAuth2AbstractProvider
 {
     protected $test = 'test';
     const IDENTIFIER = 'TEST';
