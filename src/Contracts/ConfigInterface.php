@@ -7,5 +7,5 @@ interface ConfigInterface
     /**
      * @return array
      */
-    public function get();
+    public function toArray();
 }

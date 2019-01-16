@@ -12,5 +12,5 @@ interface ConfigRetrieverInterface
      *
      * @throws \SocialiteProviders\Manager\Exception\MissingConfigException
      */
-    public function fromServices($providerName, array $additionalConfigKeys = []);
+    public function getConfig($providerName, array $additionalConfigKeys = []);
 }

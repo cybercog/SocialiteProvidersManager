@@ -1,6 +1,8 @@
 <?php
 
-namespace SocialiteProviders\Manager;
+namespace SocialiteProviders\Manager\Test\Unit;
+
+use SocialiteProviders\Manager\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +22,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $config = new Config($key, $secret, $callbackUri);
 
-        $this->assertSame($result, $config->get());
+        $this->assertSame($result, $config->toArray());
     }
 
     /**
@@ -41,6 +43,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $config = new Config($key, $secret, $callbackUri, $additional);
 
-        $this->assertSame($result, $config->get());
+        $this->assertSame($result, $config->toArray());
     }
 }

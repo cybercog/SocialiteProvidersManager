@@ -1,6 +1,6 @@
 <?php
 
-namespace SocialiteProviders\Manager\Test\Stubs;
+namespace SocialiteProviders\Manager\Test\Unit\Stubs;
 
 use League\OAuth1\Client\Credentials\TokenCredentials;
 use SocialiteProviders\Manager\OAuth1\Server;

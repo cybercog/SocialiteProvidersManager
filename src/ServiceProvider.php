@@ -4,7 +4,7 @@ namespace SocialiteProviders\Manager;
 
 use Laravel\Socialite\SocialiteServiceProvider;
 use SocialiteProviders\Manager\Contracts\Helpers\ConfigRetrieverInterface;
-use SocialiteProviders\Manager\Helpers\ConfigRetriever;
+use SocialiteProviders\Manager\Helpers\ServicesConfigRetriever;
 
 class ServiceProvider extends SocialiteServiceProvider
 {
@@ -30,7 +30,7 @@ class ServiceProvider extends SocialiteServiceProvider
         }
 
         $this->app->singleton(ConfigRetrieverInterface::class, function () {
-            return new ConfigRetriever();
+            return new ServicesConfigRetriever();
         });
     }
 }

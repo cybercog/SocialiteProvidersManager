@@ -1,6 +1,6 @@
 <?php
 
-namespace SocialiteProviders\Manager\Test;
+namespace SocialiteProviders\Manager\Test\Unit;
 
 use Laravel\Socialite\Contracts\Factory as SocialiteFactoryContract;
 use Mockery as m;
@@ -8,7 +8,7 @@ use SocialiteProviders\Manager\Config;
 use SocialiteProviders\Manager\Exception\InvalidArgumentException;
 use SocialiteProviders\Manager\Exception\MissingConfigException;
 use SocialiteProviders\Manager\SocialiteWasCalled;
-use SocialiteProviders\Manager\Test\Stubs\OAuth2ProviderStub;
+use SocialiteProviders\Manager\Test\Unit\Stubs\OAuth2ProviderStub;
 
 class OAuth2ProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,7 +46,7 @@ class OAuth2ProviderTest extends \PHPUnit_Framework_TestCase
             ->andReturn($socialite);
         $configRetriever = $this->configRetrieverMock();
         $configRetriever
-            ->shouldReceive('fromServices')
+            ->shouldReceive('getConfig')
             ->andThrow(MissingConfigException::class);
         $event = new SocialiteWasCalled($app, $configRetriever);
 
@@ -83,7 +83,7 @@ class OAuth2ProviderTest extends \PHPUnit_Framework_TestCase
             ->andReturn($socialite);
         $configRetriever = $this->configRetrieverMock();
         $configRetriever
-            ->shouldReceive('fromServices')
+            ->shouldReceive('getConfig')
             ->andReturn($config);
         $event = new SocialiteWasCalled($app, $configRetriever);
 

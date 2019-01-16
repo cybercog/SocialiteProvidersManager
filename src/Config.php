@@ -2,7 +2,9 @@
 
 namespace SocialiteProviders\Manager;
 
-class Config implements Contracts\ConfigInterface
+use SocialiteProviders\Manager\Contracts\ConfigInterface;
+
+class Config implements ConfigInterface
 {
     /**
      * @var array
@@ -20,16 +22,16 @@ class Config implements Contracts\ConfigInterface
     public function __construct($key, $secret, $callbackUri, array $additionalProviderConfig = [])
     {
         $this->config = array_merge([
-            'client_id'     => $key,
+            'client_id' => $key,
             'client_secret' => $secret,
-            'redirect'      => $callbackUri,
+            'redirect' => $callbackUri,
         ], $additionalProviderConfig);
     }
 
     /**
      * @return array
      */
-    public function get()
+    public function toArray()
     {
         return $this->config;
     }

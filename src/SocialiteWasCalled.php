@@ -116,7 +116,7 @@ class SocialiteWasCalled
 
         $config = $this->getConfig($providerClass, $providerName);
 
-        $configServer = $socialite->formatConfig($config->get());
+        $configServer = $socialite->formatConfig($config->toArray());
 
         $provider = new $providerClass(
             $this->app->offsetGet('request'), new $oauth1Server($configServer)
@@ -144,7 +144,7 @@ class SocialiteWasCalled
 
         $config = $this->getConfig($providerClass, $providerName);
 
-        $provider = $socialite->buildProvider($providerClass, $config->get());
+        $provider = $socialite->buildProvider($providerClass, $config->toArray());
 
         $provider->setConfig($config);
 
@@ -161,7 +161,7 @@ class SocialiteWasCalled
      */
     protected function getConfig($providerClass, $providerName)
     {
-        return $this->configRetriever->fromServices(
+        return $this->configRetriever->getConfig(
             $providerName, $providerClass::additionalConfigKeys()
         );
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace SocialiteProviders\Manager\Test;
+namespace SocialiteProviders\Manager\Test\Unit;
 
 use Illuminate\Contracts\Session\Session as SessionContract;
 use Illuminate\Http\Request;

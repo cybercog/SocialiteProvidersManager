@@ -1,6 +1,6 @@
 <?php
 
-namespace SocialiteProviders\Manager\Test;
+namespace SocialiteProviders\Manager\Test\Unit;
 
 use Illuminate\Contracts\Container\Container as ContainerContract;
 use Illuminate\Http\Request as HttpRequest;
@@ -64,7 +64,7 @@ trait ManagerTestTrait
     {
         $configRetriever = $this->configRetrieverMock();
         $configRetriever
-            ->shouldReceive('fromServices')
+            ->shouldReceive('getConfig')
             ->with($providerName, $providerClass::additionalConfigKeys())
             ->andReturn($this->configObject());
 

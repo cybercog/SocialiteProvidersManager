@@ -1,6 +1,6 @@
 <?php
 
-namespace SocialiteProviders\Manager\Test;
+namespace SocialiteProviders\Manager\Test\Unit;
 
 use Laravel\Socialite\Contracts\Factory as SocialiteFactoryContract;
 use Mockery as m;

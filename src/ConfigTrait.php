@@ -16,7 +16,7 @@ trait ConfigTrait
      */
     public function setConfig(ConfigInterface $config)
     {
-        $config = $config->get();
+        $config = $config->toArray();
 
         $this->config = $config;
         $this->clientId = $config['client_id'];

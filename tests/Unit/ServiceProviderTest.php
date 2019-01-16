@@ -1,6 +1,6 @@
 <?php
 
-namespace SocialiteProviders\Manager\Test;
+namespace SocialiteProviders\Manager\Test\Unit;
 
 use Mockery as m;
 use SocialiteProviders\Manager\ServiceProvider;
@@ -36,7 +36,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
 
 namespace SocialiteProviders\Manager;
 
-use SocialiteProviders\Manager\Test\ServiceProviderTest;
+use SocialiteProviders\Manager\Test\Unit\ServiceProviderTest;
 
 function app($make)
 {

@@ -7,27 +7,27 @@ use SocialiteProviders\Manager\Config;
 use SocialiteProviders\Manager\Contracts\Helpers\ConfigRetrieverInterface;
 use SocialiteProviders\Manager\Exception\MissingConfigException;
 
-class ConfigRetriever implements ConfigRetrieverInterface
+class ServicesConfigRetriever implements ConfigRetrieverInterface
 {
     /**
      * @var string
      */
-    protected $providerName;
+    private $providerName = '';
 
     /**
      * @var string
      */
-    protected $providerIdentifier;
+    private $providerIdentifier = '';
 
     /**
      * @var array
      */
-    protected $servicesArray;
+    private $configArray = [];
 
     /**
      * @var array
      */
-    protected $additionalConfigKeys;
+    private $additionalConfigKeys = [];
 
     /**
      * @param string $providerName
@@ -37,19 +37,18 @@ class ConfigRetriever implements ConfigRetrieverInterface
      *
      * @throws \SocialiteProviders\Manager\Exception\MissingConfigException
      */
-    public function fromServices($providerName, array $additionalConfigKeys = [])
+    public function getConfig($providerName, array $additionalConfigKeys = [])
     {
         $this->providerName = $providerName;
-        $this->getConfigFromServicesArray($providerName);
-
+        $this->configArray = $this->getConfigArray($providerName);
         $this->additionalConfigKeys = $additionalConfigKeys;
 
         return new Config(
-            $this->getFromServices('client_id'),
-            $this->getFromServices('client_secret'),
-            $this->getFromServices('redirect'),
+            $this->findByKey('client_id'),
+            $this->findByKey('client_secret'),
+            $this->findByKey('redirect'),
             $this->getConfigItems($additionalConfigKeys, function ($key) {
-                return $this->getFromServices(strtolower($key));
+                return $this->findByKey(strtolower($key));
             })
         );
     }
@@ -60,9 +59,9 @@ class ConfigRetriever implements ConfigRetrieverInterface
      *
      * @return array
      */
-    protected function getConfigItems(array $configKeys, Closure $keyRetrievalClosure)
+    private function getConfigItems(array $configKeys, Closure $keyRetrievalClosure)
     {
-        if (count($configKeys) < 1) {
+        if (count($configKeys) === 0) {
             return [];
         }
 
@@ -75,7 +74,7 @@ class ConfigRetriever implements ConfigRetrieverInterface
      *
      * @return array
      */
-    protected function retrieveItemsFromConfig(array $keys, Closure $keyRetrievalClosure)
+    private function retrieveItemsFromConfig(array $keys, Closure $keyRetrievalClosure)
     {
         $out = [];
 
@@ -93,9 +92,9 @@ class ConfigRetriever implements ConfigRetrieverInterface
      *
      * @throws \SocialiteProviders\Manager\Exception\MissingConfigException
      */
-    protected function getFromServices($key)
+    private function findByKey($key)
     {
-        $keyExists = array_key_exists($key, $this->servicesArray);
+        $keyExists = array_key_exists($key, $this->configArray);
 
         // ADDITIONAL value is empty
         if (!$keyExists && $this->isAdditionalConfig($key)) {
@@ -107,7 +106,7 @@ class ConfigRetriever implements ConfigRetrieverInterface
             throw new MissingConfigException("Missing services entry for {$this->providerName}.$key");
         }
 
-        return $this->servicesArray[$key];
+        return $this->configArray[$key];
     }
 
     /**
@@ -117,7 +116,7 @@ class ConfigRetriever implements ConfigRetrieverInterface
      *
      * @throws \SocialiteProviders\Manager\Exception\MissingConfigException
      */
-    protected function getConfigFromServicesArray($providerName)
+    private function getConfigArray($providerName)
     {
         $configArray = config("services.{$providerName}");
 
@@ -134,7 +133,7 @@ class ConfigRetriever implements ConfigRetrieverInterface
             }
         }
 
-        return $this->servicesArray = $configArray;
+        return $configArray;
     }
 
     /**
@@ -142,7 +141,7 @@ class ConfigRetriever implements ConfigRetrieverInterface
      *
      * @return bool
      */
-    protected function isAdditionalConfig($key)
+    private function isAdditionalConfig($key)
     {
         return in_array(strtolower($key), $this->additionalConfigKeys, true);
     }
