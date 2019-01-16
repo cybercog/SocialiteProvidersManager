@@ -26,15 +26,6 @@ class SocialiteWasCalled
     private $configRetriever;
 
     /**
-     * @var array
-     */
-    private $spoofedConfig = [
-        'client_id' => 'spoofed_client_id',
-        'client_secret' => 'spoofed_client_secret',
-        'redirect' => 'spoofed_redirect',
-    ];
-
-    /**
      * @param \Illuminate\Contracts\Container\Container $app
      * @param \SocialiteProviders\Manager\Contracts\Helpers\ConfigRetrieverInterface $configRetriever
      */
@@ -161,14 +152,9 @@ class SocialiteWasCalled
      */
     protected function getConfig($providerClass, $providerName)
     {
+        // TODO: Make able to switch to `NullConfigRetriever`
         return $this->configRetriever->getConfig(
             $providerName, $providerClass::additionalConfigKeys()
-        );
-
-        return new Config(
-            $this->spoofedConfig['client_id'],
-            $this->spoofedConfig['client_secret'],
-            $this->spoofedConfig['redirect']
         );
     }
 

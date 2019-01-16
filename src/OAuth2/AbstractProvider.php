@@ -57,7 +57,7 @@ abstract class AbstractProvider extends BaseProvider implements ProviderInterfac
     /**
      * Get the access token from the token response body.
      *
-     * @param string $body
+     * @param array $body
      *
      * @return string
      */
@@ -69,7 +69,7 @@ abstract class AbstractProvider extends BaseProvider implements ProviderInterfac
     /**
      * Get the refresh token from the token response body.
      *
-     * @param string $body
+     * @param array $body
      *
      * @return string
      */
@@ -81,7 +81,7 @@ abstract class AbstractProvider extends BaseProvider implements ProviderInterfac
     /**
      * Get the expires in from the token response body.
      *
-     * @param string $body
+     * @param array $body
      *
      * @return string
      */

@@ -10,6 +10,8 @@ class ServiceProvider extends SocialiteServiceProvider
 {
     /**
      * Bootstrap the provider services.
+     *
+     * @return void
      */
     public function boot()
     {
@@ -20,6 +22,8 @@ class ServiceProvider extends SocialiteServiceProvider
 
     /**
      * Register the provider services.
+     *
+     * @return void
      */
     public function register()
     {

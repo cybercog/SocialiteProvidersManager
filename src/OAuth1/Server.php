@@ -3,8 +3,8 @@
 namespace SocialiteProviders\Manager\OAuth1;
 
 use GuzzleHttp\Exception\BadResponseException;
+use InvalidArgumentException;
 use League\OAuth1\Client\Credentials\TemporaryCredentials;
-use League\OAuth1\Client\Credentials\TokenCredentials;
 use League\OAuth1\Client\Server\Server as BaseServer;
 use SocialiteProviders\Manager\ConfigTrait;
 
@@ -43,11 +43,13 @@ abstract class Server extends BaseServer
      * @param string                                                 $verifier
      *
      * @return \League\OAuth1\Client\Credentials\TokenCredentials
+     *
+     * @throws \League\OAuth1\Client\Credentials\CredentialsException
      */
     public function getTokenCredentials(TemporaryCredentials $temporaryCredentials, $temporaryIdentifier, $verifier)
     {
         if ($temporaryIdentifier !== $temporaryCredentials->getIdentifier()) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Temporary identifier passed back by server does not match that of stored temporary credentials.
                 Potential man-in-the-middle.'
             );
@@ -63,18 +65,20 @@ abstract class Server extends BaseServer
         try {
             if ('GuzzleHttp\\Client' === get_class($client)) {
                 $response = $client->post($uri, [
-                    'headers'     => $headers,
+                    'headers' => $headers,
                     'form_params' => $bodyParameters,
                 ]);
             } else {
                 $response = $client->post($uri, $headers, $bodyParameters)->send();
             }
-        } catch (BadResponseException $e) {
-            return $this->handleTokenCredentialsBadResponse($e);
+        } catch (BadResponseException $exception) {
+            // TODO: Return throw, rly?
+            return $this->handleTokenCredentialsBadResponse($exception);
         }
 
+        // TODO: Verify return type
         return [
-            'tokenCredentials'        => $this->createTokenCredentials($response->getBody()),
+            'tokenCredentials' => $this->createTokenCredentials($response->getBody()),
             'credentialsResponseBody' => $response->getBody(),
         ];
     }

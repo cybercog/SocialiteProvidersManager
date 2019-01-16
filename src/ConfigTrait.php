@@ -7,18 +7,20 @@ use SocialiteProviders\Manager\Contracts\ConfigInterface;
 trait ConfigTrait
 {
     /**
-     * @var \SocialiteProviders\Manager\Contracts\OAuth1\ProviderInterface|\SocialiteProviders\Manager\Contracts\OAuth2\ProviderInterface
+     * @var array
      */
-    protected $config;
+    protected $configArray;
 
     /**
-     * @param \SocialiteProviders\Manager\Contracts\OAuth1\ProviderInterface|\SocialiteProviders\Manager\Contracts\OAuth2\ProviderInterface $config
+     * @param \SocialiteProviders\Manager\Contracts\ConfigInterface $config
+     *
+     * @return $this
      */
     public function setConfig(ConfigInterface $config)
     {
         $config = $config->toArray();
 
-        $this->config = $config;
+        $this->configArray = $config;
         $this->clientId = $config['client_id'];
         $this->clientSecret = $config['client_secret'];
         $this->redirectUrl = $config['redirect'];
@@ -44,10 +46,10 @@ trait ConfigTrait
     {
         // check manually if a key is given and if it exists in the config
         // this has to be done to check for spoofed additional config keys so that null isn't returned
-        if (!empty($key) && empty($this->config[$key])) {
+        if (!empty($key) && empty($this->configArray[$key])) {
             return $default;
         }
 
-        return $key ? array_get($this->config, $key, $default) : $this->config;
+        return $key ? array_get($this->configArray, $key, $default) : $this->configArray;
     }
 }

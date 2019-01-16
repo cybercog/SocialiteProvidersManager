@@ -56,6 +56,7 @@ abstract class AbstractProvider extends BaseProvider implements ProviderInterfac
             parse_str($token['credentialsResponseBody'], $credentialsResponseBody);
 
             if (!$credentialsResponseBody || !is_array($credentialsResponseBody)) {
+                // TODO: Cover in tests
                 throw new CredentialsException('Unable to parse token credentials response.');
             }
 
@@ -172,8 +173,8 @@ abstract class AbstractProvider extends BaseProvider implements ProviderInterfac
         $temp = unserialize($this->request->session()->get('oauth_temp'));
 
         return $this->server->getTokenCredentials(
-                $temp, $this->request->get('oauth_token'), $this->request->get('oauth_verifier')
-            );
+            $temp, $this->request->get('oauth_token'), $this->request->get('oauth_verifier')
+        );
     }
 
     /**
