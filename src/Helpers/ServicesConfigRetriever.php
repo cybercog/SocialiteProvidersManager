@@ -2,7 +2,6 @@
 
 namespace SocialiteProviders\Manager\Helpers;
 
-use Closure;
 use SocialiteProviders\Manager\Config;
 use SocialiteProviders\Manager\Contracts\Helpers\ConfigRetrieverInterface;
 use SocialiteProviders\Manager\Exception\MissingConfigException;
@@ -31,58 +30,53 @@ class ServicesConfigRetriever implements ConfigRetrieverInterface
 
     /**
      * @param string $providerName
-     * @param array  $additionalConfigKeys
+     * @param array  $additionalKeys
      *
      * @return \SocialiteProviders\Manager\Contracts\ConfigInterface
      *
      * @throws \SocialiteProviders\Manager\Exception\MissingConfigException
      */
-    public function getConfig($providerName, array $additionalConfigKeys = [])
+    public function getConfig($providerName, array $additionalKeys = [])
     {
         $this->providerName = $providerName;
         $this->configArray = $this->getConfigArray($providerName);
-        $this->additionalConfigKeys = $additionalConfigKeys;
+        $this->additionalConfigKeys = $additionalKeys;
 
         return new Config(
-            $this->findByKey('client_id'),
-            $this->findByKey('client_secret'),
-            $this->findByKey('redirect'),
-            $this->getConfigItems($additionalConfigKeys, function ($key) {
-                return $this->findByKey(strtolower($key));
-            })
+            $this->findOrFail('client_id'),
+            $this->findOrFail('client_secret'),
+            $this->findOrFail('redirect'),
+            $this->findAdditionalKeys($additionalKeys)
         );
     }
 
     /**
-     * @param array    $configKeys
-     * @param \Closure $keyRetrievalClosure
+     * @param array $keys
      *
      * @return array
      */
-    private function getConfigItems(array $configKeys, Closure $keyRetrievalClosure)
+    private function findAdditionalKeys(array $keys)
     {
-        if (count($configKeys) === 0) {
+        if (count($keys) === 0) {
             return [];
         }
 
-        return $this->retrieveItemsFromConfig($configKeys, $keyRetrievalClosure);
+        $foundKeys = [];
+        foreach ($keys as $key) {
+            $foundKeys[$key] = $this->find($key);
+        }
+
+        return $foundKeys;
     }
 
     /**
-     * @param array    $keys
-     * @param \Closure $keyRetrievalClosure
+     * @param string $key
      *
-     * @return array
+     * @return null|string
      */
-    private function retrieveItemsFromConfig(array $keys, Closure $keyRetrievalClosure)
+    private function find($key)
     {
-        $out = [];
-
-        foreach ($keys as $key) {
-            $out[$key] = $keyRetrievalClosure($key);
-        }
-
-        return $out;
+        return isset($this->configArray[$key]) ? $this->configArray[$key] : null;
     }
 
     /**
@@ -92,35 +86,27 @@ class ServicesConfigRetriever implements ConfigRetrieverInterface
      *
      * @throws \SocialiteProviders\Manager\Exception\MissingConfigException
      */
-    private function findByKey($key)
+    private function findOrFail($key)
     {
-        $keyExists = array_key_exists($key, $this->configArray);
+        $value = $this->find($key);
 
-        // ADDITIONAL value is empty
-        if (!$keyExists && $this->isAdditionalConfig($key)) {
-            return;
+        if (is_null($value)) {
+            throw new MissingConfigException("Missing services entry for {$this->providerName}.{$key}");
         }
 
-        // REQUIRED value is empty
-        if (!$keyExists) {
-            throw new MissingConfigException("Missing services entry for {$this->providerName}.$key");
-        }
-
-        return $this->configArray[$key];
+        return $value;
     }
 
     /**
      * @param string $providerName
      *
      * @return array
-     *
-     * @throws \SocialiteProviders\Manager\Exception\MissingConfigException
      */
     private function getConfigArray($providerName)
     {
         $configArray = config("services.{$providerName}");
 
-        if (empty($configArray)) {
+        if (is_null($configArray)) {
             // If we are running in console we should spoof values to make Socialite happy...
             if (app()->runningInConsole()) {
                 $configArray = [
@@ -129,20 +115,10 @@ class ServicesConfigRetriever implements ConfigRetrieverInterface
                     'redirect' => "{$this->providerIdentifier}_REDIRECT_URI",
                 ];
             } else {
-                throw new MissingConfigException("There is no services entry for $providerName");
+                $configArray = [];
             }
         }
 
         return $configArray;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
-    private function isAdditionalConfig($key)
-    {
-        return in_array(strtolower($key), $this->additionalConfigKeys, true);
     }
 }

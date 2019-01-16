@@ -107,6 +107,25 @@ class ConfigRetrieverTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_throws_exception_when_all_service_config_is_missing()
+    {
+        $this->expectException(MissingConfigException::class);
+
+        $providerName = 'test';
+        $config = [];
+        self::$functions
+            ->shouldReceive('config')
+            ->with("services.{$providerName}")
+            ->once()
+            ->andReturn($config);
+        $configRetriever = new ServicesConfigRetriever();
+
+        $configRetriever->getConfig($providerName);
+    }
+
+    /**
+     * @test
+     */
     public function it_throws_exception_when_client_secret_in_service_config_is_missing()
     {
         $this->expectException(MissingConfigException::class);
@@ -185,6 +204,34 @@ class ConfigRetrieverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test-app-id', $configArray['app_id']);
         $this->assertSame($options, $configArray['options']);
         $this->assertEmpty($configArray['not-exists']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_retrieves_a_config_with_additional_keys_same_as_required()
+    {
+        $providerName = 'test';
+        $clientId = 'key';
+        $clientSecret = 'secret';
+        $redirect = 'uri';
+        $config = array_merge([
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'redirect' => $redirect,
+        ]);
+        self::$functions
+            ->shouldReceive('config')
+            ->with("services.{$providerName}")
+            ->once()
+            ->andReturn($config);
+        $configRetriever = new ServicesConfigRetriever();
+
+        $configArray = $configRetriever->getConfig($providerName, ['client_id'])->toArray();
+        $this->assertCount(3, $configArray);
+        $this->assertSame($clientId, $configArray['client_id']);
+        $this->assertSame($clientSecret, $configArray['client_secret']);
+        $this->assertSame($redirect, $configArray['redirect']);
     }
 }
 
