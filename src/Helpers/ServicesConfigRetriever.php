@@ -14,19 +14,9 @@ class ServicesConfigRetriever implements ConfigRetrieverInterface
     private $providerName = '';
 
     /**
-     * @var string
-     */
-    private $providerIdentifier = '';
-
-    /**
      * @var array
      */
     private $configArray = [];
-
-    /**
-     * @var array
-     */
-    private $additionalConfigKeys = [];
 
     /**
      * @param string $providerName
@@ -40,7 +30,6 @@ class ServicesConfigRetriever implements ConfigRetrieverInterface
     {
         $this->providerName = $providerName;
         $this->configArray = $this->getConfigArray($providerName);
-        $this->additionalConfigKeys = $additionalKeys;
 
         return new Config(
             $this->findOrFail('client_id'),
@@ -107,16 +96,7 @@ class ServicesConfigRetriever implements ConfigRetrieverInterface
         $configArray = config("services.{$providerName}");
 
         if (is_null($configArray)) {
-            // If we are running in console we should spoof values to make Socialite happy...
-            if (app()->runningInConsole()) {
-                $configArray = [
-                    'client_id' => "{$this->providerIdentifier}_KEY",
-                    'client_secret' => "{$this->providerIdentifier}_SECRET",
-                    'redirect' => "{$this->providerIdentifier}_REDIRECT_URI",
-                ];
-            } else {
-                $configArray = [];
-            }
+            return [];
         }
 
         return $configArray;
